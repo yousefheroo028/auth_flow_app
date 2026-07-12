@@ -26,10 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Auth Flow App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
+        theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
         home: const AuthWrapper(),
         routes: {
           '/login': (context) => const LoginPage(),
@@ -47,18 +44,10 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SessionBloc, SessionState>(
-      builder: (context, state) {
-        if (state is SessionLoading || state is SessionInitial) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else if (state is Authenticated) {
-          return const HomePage();
-        } else {
-          return const LoginPage();
-        }
+      builder: (context, state) => switch (state) {
+        SessionLoading() || SessionInitial() => const Scaffold(body: Center(child: CircularProgressIndicator())),
+        Authenticated(user: _) => const HomePage(),
+        _ => const LoginPage(),
       },
     );
   }
