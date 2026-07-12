@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
   final PhoneAuthRepository phoneAuthRepository;
 
-  PhoneAuthBloc({required this.phoneAuthRepository})
-    : super(const PhoneAuthInitial()) {
+  PhoneAuthBloc({required this.phoneAuthRepository}) : super(const PhoneAuthInitial()) {
     on<SendOTPEvent>(_onSendOTP);
     on<VerifyOTPEvent>(_onVerifyOTP);
   }
@@ -21,8 +20,8 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     final result = await phoneAuthRepository.sendOTP(phoneNumber: event.phoneNumber);
 
     result.fold(
-      (failure) => emit(PhoneAuthError(message: failure.message)),
-      (_) => emit(OTPSent(phoneNumber: event.phoneNumber)),
+      ifLeft: (failure) => emit(PhoneAuthError(message: failure.message)),
+      ifRight: (_) => emit(OTPSent(phoneNumber: event.phoneNumber)),
     );
   }
 
@@ -38,8 +37,8 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     );
 
     result.fold(
-      (failure) => emit(PhoneAuthError(message: failure.message)),
-      (user) => emit(PhoneAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(PhoneAuthError(message: failure.message)),
+      ifRight: (user) => emit(PhoneAuthSuccess(user: user)),
     );
   }
 }

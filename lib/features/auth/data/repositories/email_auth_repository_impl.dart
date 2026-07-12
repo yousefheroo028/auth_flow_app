@@ -1,4 +1,5 @@
-import 'package:dartz/dartz.dart';
+import 'package:dart_either/dart_either.dart';
+
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/core/error/failures.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/email_auth_datasource.dart';
@@ -9,8 +10,8 @@ class EmailAuthRepositoryImpl implements EmailAuthRepository {
   final EmailAuthDataSource _emailAuthDataSource;
 
   EmailAuthRepositoryImpl({
-    required EmailAuthDataSource emailAuthDataSource,
-  }) : _emailAuthDataSource = emailAuthDataSource;
+    required this._emailAuthDataSource,
+  });
 
   @override
   Future<Either<Failure, UserEntity>> signUpWithEmail({

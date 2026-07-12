@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/core/error/failures.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/phone_auth_datasource.dart';
@@ -8,9 +8,7 @@ import 'package:auth_flow_app/features/auth/domain/repositories/phone_auth_repos
 class PhoneAuthRepositoryImpl implements PhoneAuthRepository {
   final PhoneAuthDataSource _phoneAuthDataSource;
 
-  PhoneAuthRepositoryImpl({
-    required PhoneAuthDataSource phoneAuthDataSource,
-  }) : _phoneAuthDataSource = phoneAuthDataSource;
+  PhoneAuthRepositoryImpl({required this._phoneAuthDataSource});
 
   @override
   Future<Either<Failure, void>> sendOTP({required String phoneNumber}) async {

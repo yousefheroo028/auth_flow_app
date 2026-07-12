@@ -24,8 +24,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
 
     result.fold(
-      (failure) => emit(ProfileError(message: failure.message)),
-      (user) => emit(ProfileUpdated(user: user)),
+      ifLeft: (failure) => emit(ProfileError(message: failure.message)),
+      ifRight: (user) => emit(ProfileUpdated(user: user)),
     );
   }
 
@@ -40,8 +40,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
 
     result.fold(
-      (failure) => emit(ProfileError(message: failure.message)),
-      (photoUrl) => emit(ProfilePictureUploaded(photoUrl: photoUrl)),
+      ifLeft: (failure) => emit(ProfileError(message: failure.message)),
+      ifRight: (photoUrl) => emit(ProfilePictureUploaded(photoUrl: photoUrl)),
     );
   }
 
@@ -54,8 +54,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final result = await profileRepository.deleteAccount();
 
     result.fold(
-      (failure) => emit(ProfileError(message: failure.message)),
-      (_) => emit(const AccountDeleted()),
+      ifLeft: (failure) => emit(ProfileError(message: failure.message)),
+      ifRight: (_) => emit(const AccountDeleted()),
     );
   }
 }

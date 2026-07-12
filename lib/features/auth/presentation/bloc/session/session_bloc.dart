@@ -38,15 +38,16 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
     final result = await sessionRepository.getCurrentUser();
 
-    result.fold((failure) => emit(SessionError(message: failure.message)), (
-      user,
-    ) {
-      if (user != null) {
-        emit(Authenticated(user: user));
-      } else {
-        emit(const Unauthenticated());
-      }
-    });
+    result.fold(
+      ifLeft: (failure) => emit(SessionError(message: failure.message)),
+      ifRight: (user) {
+        if (user != null) {
+          emit(Authenticated(user: user));
+        } else {
+          emit(const Unauthenticated());
+        }
+      },
+    );
   }
 
   Future<void> _onSignOut(
@@ -58,8 +59,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     final result = await sessionRepository.signOut();
 
     result.fold(
-      (failure) => emit(SessionError(message: failure.message)),
-      (_) => emit(const Unauthenticated()),
+      ifLeft: (failure) => emit(SessionError(message: failure.message)),
+      ifRight: (_) => emit(const Unauthenticated()),
     );
   }
 

@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  built_collection:
+    dependency: transitive
+    description:
+      name: built_collection
+      sha256: "376e3dd27b51ea877c28d525560790aee2e6fbb5f20e2f85d5081027d94e2100"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.1"
   characters:
     dependency: transitive
     description:
@@ -65,14 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
-  dartz:
+  dart_either:
     dependency: "direct main"
     description:
-      name: dartz
-      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
+      name: dart_either
+      sha256: "813687ccfd757124e980a292df54a67c35642d0312bd2d9f70595708295e88d7"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.1"
+    version: "2.1.0"
   equatable:
     dependency: "direct main"
     description:

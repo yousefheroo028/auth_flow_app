@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/core/error/failures.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/profile_datasource.dart';
@@ -9,8 +9,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileDataSource _profileDataSource;
 
   ProfileRepositoryImpl({
-    required ProfileDataSource profileDataSource,
-  }) : _profileDataSource = profileDataSource;
+    required this._profileDataSource,
+  });
 
   @override
   Future<Either<Failure, UserEntity>> updateProfile({

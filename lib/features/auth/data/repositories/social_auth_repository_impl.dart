@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/core/error/failures.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/social_auth_datasource.dart';
@@ -9,8 +9,8 @@ class SocialAuthRepositoryImpl implements SocialAuthRepository {
   final SocialAuthDataSource _socialAuthDataSource;
 
   SocialAuthRepositoryImpl({
-    required SocialAuthDataSource socialAuthDataSource,
-  }) : _socialAuthDataSource = socialAuthDataSource;
+    required this._socialAuthDataSource,
+  });
 
   @override
   Future<Either<Failure, UserEntity>> signInWithGoogle() async {

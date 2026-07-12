@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
   final SocialAuthRepository socialAuthRepository;
 
-  SocialAuthBloc({required this.socialAuthRepository})
-    : super(const SocialAuthInitial()) {
+  SocialAuthBloc({required this.socialAuthRepository}) : super(const SocialAuthInitial()) {
     on<SignInWithGoogleEvent>(_onSignInWithGoogle);
     on<SignInWithAppleEvent>(_onSignInWithApple);
     on<SignInWithGitHubEvent>(_onSignInWithGitHub);
@@ -22,8 +21,8 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
     final result = await socialAuthRepository.signInWithGoogle();
 
     result.fold(
-      (failure) => emit(SocialAuthError(message: failure.message)),
-      (user) => emit(SocialAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
+      ifRight: (user) => emit(SocialAuthSuccess(user: user)),
     );
   }
 
@@ -36,8 +35,8 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
     final result = await socialAuthRepository.signInWithApple();
 
     result.fold(
-      (failure) => emit(SocialAuthError(message: failure.message)),
-      (user) => emit(SocialAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
+      ifRight: (user) => emit(SocialAuthSuccess(user: user)),
     );
   }
 
@@ -50,8 +49,8 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
     final result = await socialAuthRepository.signInWithGitHub();
 
     result.fold(
-      (failure) => emit(SocialAuthError(message: failure.message)),
-      (user) => emit(SocialAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
+      ifRight: (user) => emit(SocialAuthSuccess(user: user)),
     );
   }
 }

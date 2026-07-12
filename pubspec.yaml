@@ -19,7 +19,7 @@ dependencies:
   get_it: ^7.6.4
 
   # Functional Programming & Error Handling
-  dartz: ^0.10.1
+  dart_either: ^2.1.0
 
   # UI Components
   cupertino_icons: ^1.0.6

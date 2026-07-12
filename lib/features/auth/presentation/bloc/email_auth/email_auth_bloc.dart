@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
   final EmailAuthRepository emailAuthRepository;
 
-  EmailAuthBloc({required this.emailAuthRepository})
-    : super(const EmailAuthInitial()) {
+  EmailAuthBloc({required this.emailAuthRepository}) : super(const EmailAuthInitial()) {
     on<SignUpWithEmailEvent>(_onSignUpWithEmail);
     on<SignInWithEmailEvent>(_onSignInWithEmail);
     on<ResetPasswordEvent>(_onResetPassword);
@@ -26,8 +25,8 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     );
 
     result.fold(
-      (failure) => emit(EmailAuthError(message: failure.message)),
-      (user) => emit(EmailAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (user) => emit(EmailAuthSuccess(user: user)),
     );
   }
 
@@ -43,8 +42,8 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     );
 
     result.fold(
-      (failure) => emit(EmailAuthError(message: failure.message)),
-      (user) => emit(EmailAuthSuccess(user: user)),
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (user) => emit(EmailAuthSuccess(user: user)),
     );
   }
 
@@ -57,8 +56,8 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     final result = await emailAuthRepository.resetPassword(email: event.email);
 
     result.fold(
-      (failure) => emit(EmailAuthError(message: failure.message)),
-      (_) => emit(const EmailSent(message: 'Password reset email sent')),
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (_) => emit(const EmailSent(message: 'Password reset email sent')),
     );
   }
 
@@ -71,8 +70,8 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     final result = await emailAuthRepository.sendMagicLink(email: event.email);
 
     result.fold(
-      (failure) => emit(EmailAuthError(message: failure.message)),
-      (_) => emit(const EmailSent(message: 'Magic link sent to your email')),
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (_) => emit(const EmailSent(message: 'Magic link sent to your email')),
     );
   }
 }

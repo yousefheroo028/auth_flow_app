@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/core/error/failures.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/session_datasource.dart';
@@ -9,8 +9,8 @@ class SessionRepositoryImpl implements SessionRepository {
   final SessionDataSource _sessionDataSource;
 
   SessionRepositoryImpl({
-    required SessionDataSource sessionDataSource,
-  }) : _sessionDataSource = sessionDataSource;
+    required this._sessionDataSource,
+  });
 
   @override
   Future<Either<Failure, UserEntity?>> getCurrentUser() async {
