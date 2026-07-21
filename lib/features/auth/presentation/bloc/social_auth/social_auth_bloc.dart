@@ -8,7 +8,6 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
 
   SocialAuthBloc({required this.socialAuthRepository}) : super(const SocialAuthInitial()) {
     on<SignInWithGoogleEvent>(_onSignInWithGoogle);
-    on<SignInWithAppleEvent>(_onSignInWithApple);
     on<SignInWithGitHubEvent>(_onSignInWithGitHub);
   }
 
@@ -16,23 +15,9 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
     SignInWithGoogleEvent event,
     Emitter<SocialAuthState> emit,
   ) async {
-    emit(const SocialAuthLoading());
+    // emit(const SocialAuthLoading());
 
     final result = await socialAuthRepository.signInWithGoogle();
-
-    result.fold(
-      ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
-      ifRight: (user) => emit(SocialAuthSuccess(user: user)),
-    );
-  }
-
-  Future<void> _onSignInWithApple(
-    SignInWithAppleEvent event,
-    Emitter<SocialAuthState> emit,
-  ) async {
-    emit(const SocialAuthLoading());
-
-    final result = await socialAuthRepository.signInWithApple();
 
     result.fold(
       ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
@@ -44,13 +29,13 @@ class SocialAuthBloc extends Bloc<SocialAuthEvent, SocialAuthState> {
     SignInWithGitHubEvent event,
     Emitter<SocialAuthState> emit,
   ) async {
-    emit(const SocialAuthLoading());
+    // emit(const SocialAuthLoading());
 
     final result = await socialAuthRepository.signInWithGitHub();
 
     result.fold(
       ifLeft: (failure) => emit(SocialAuthError(message: failure.message)),
-      ifRight: (user) => emit(SocialAuthSuccess(user: user)),
+      ifRight: (_) => emit(const SocialAuthViaDeepLink()),
     );
   }
 }

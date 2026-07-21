@@ -6,6 +6,7 @@ abstract class EmailAuthRepository {
   Future<Either<Failure, UserEntity>> signUpWithEmail({
     required String email,
     required String password,
+    required String name,
   });
 
   Future<Either<Failure, UserEntity>> signInWithEmail({
@@ -15,7 +16,9 @@ abstract class EmailAuthRepository {
 
   Future<Either<Failure, void>> resetPassword({required String email});
 
-  Future<Either<Failure, void>> verifyEmail({required String token});
+  Future<Either<Failure, void>> verifyEmail({required String email, required String otp});
 
-  Future<Either<Failure, void>> sendMagicLink({required String email});
+  Future<Either<Failure, void>> updatePassword({required String password});
+
+  Future<Either<Failure, void>> sendMagicLink({required String email, String? emailRedirectTo});
 }

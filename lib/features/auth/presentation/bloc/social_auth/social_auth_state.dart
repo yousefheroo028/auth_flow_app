@@ -16,6 +16,10 @@ class SocialAuthLoading extends SocialAuthState {
   const SocialAuthLoading();
 }
 
+class SocialAuthViaDeepLink extends SocialAuthState {
+  const SocialAuthViaDeepLink();
+}
+
 class SocialAuthSuccess extends SocialAuthState {
   final UserEntity user;
 

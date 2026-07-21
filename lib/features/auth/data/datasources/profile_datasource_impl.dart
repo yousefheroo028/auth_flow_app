@@ -1,12 +1,14 @@
 import 'package:auth_flow_app/core/error/exceptions.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/auth_client.dart';
 import 'package:auth_flow_app/features/auth/data/datasources/profile_datasource.dart';
+import 'package:auth_flow_app/features/auth/data/datasources/storage_client.dart';
 import 'package:auth_flow_app/features/auth/data/models/user_model.dart';
 
 class ProfileDataSourceImpl implements ProfileDataSource {
   final AuthClient _authClient;
+  final StorageClient _storageClient;
 
-  ProfileDataSourceImpl(this._authClient);
+  ProfileDataSourceImpl(this._authClient, this._storageClient);
 
   @override
   Future<UserModel> updateProfile({
@@ -14,8 +16,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     String? photoUrl,
   }) async {
     try {
-      // TODO: Implement updateProfile
-      throw UnimplementedError('updateProfile not implemented yet');
+      final user = await _authClient.updateProfile(displayName, photoUrl);
+      if (user.user == null) throw AuthException('The user is not found.');
+      return UserModel.fromSupabase(user.user!);
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -26,8 +29,8 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   @override
   Future<String> uploadProfilePicture({required String filePath}) async {
     try {
-      // TODO: Implement uploadProfilePicture
-      throw UnimplementedError('uploadProfilePicture not implemented yet');
+      final newUrl = await _storageClient.uploadProfilePicture(filePath: filePath);
+      return newUrl;
     } catch (e) {
       throw ServerException(
         'Failed to upload profile picture: ${e.toString()}',
@@ -38,8 +41,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   @override
   Future<void> deleteAccount() async {
     try {
-      // TODO: Implement deleteAccount
-      throw UnimplementedError('deleteAccount not implemented yet');
+      await _authClient.deleteAccount();
     } on AuthException {
       rethrow;
     } catch (e) {

@@ -12,10 +12,15 @@ class EmailAuthDataSourceImpl implements EmailAuthDataSource {
   Future<UserModel> signUpWithEmail({
     required String email,
     required String password,
+    required String name,
   }) async {
     try {
-      // TODO: Implement signUpWithEmail
-      throw UnimplementedError('signUpWithEmail not implemented yet');
+      final response = await _authClient.signUp(email: email, password: password, name: name);
+      if (response.user == null) {
+        throw AuthException('Signing Up Failed.');
+      }
+
+      return UserModel.fromSupabase(response.user!);
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -29,8 +34,13 @@ class EmailAuthDataSourceImpl implements EmailAuthDataSource {
     required String password,
   }) async {
     try {
-      // TODO: Implement signInWithEmail
-      throw UnimplementedError('signInWithEmail not implemented yet');
+      final response = await _authClient.signIn(email: email, password: password);
+
+      if (response.user == null) {
+        throw AuthException('Invalid Credintials');
+      }
+
+      return UserModel.fromSupabase(response.user!);
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -41,8 +51,7 @@ class EmailAuthDataSourceImpl implements EmailAuthDataSource {
   @override
   Future<void> resetPassword({required String email}) async {
     try {
-      // TODO: Implement resetPassword
-      throw UnimplementedError('resetPassword not implemented yet');
+      await _authClient.requestPasswordReset(email: email);
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -51,10 +60,12 @@ class EmailAuthDataSourceImpl implements EmailAuthDataSource {
   }
 
   @override
-  Future<void> verifyEmail({required String token}) async {
+  Future<void> verifyEmail({required String email, required String token}) async {
     try {
-      // TODO: Implement verifyEmail
-      throw UnimplementedError('verifyEmail not implemented yet');
+      final response = await _authClient.verifyPasswordResetRequestUsingOTP(email: email, otp: token);
+      if (response.user == null) {
+        throw AuthException('Invalid OTP or the code expired.');
+      }
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -63,10 +74,18 @@ class EmailAuthDataSourceImpl implements EmailAuthDataSource {
   }
 
   @override
-  Future<void> sendMagicLink({required String email}) async {
+  Future<void> updatePassword({required String password}) async {
     try {
-      // TODO: Implement sendMagicLink
-      throw UnimplementedError('sendMagicLink not implemented yet');
+      await _authClient.updatePassword(password: password);
+    } catch (e) {
+      throw ServerException('Failed to update password: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> sendMagicLink({required String email, String? emailRedirectTo}) async {
+    try {
+      await _authClient.sendMagicLink(email: email, emailRedirectTo: emailRedirectTo);
     } on AuthException {
       rethrow;
     } catch (e) {

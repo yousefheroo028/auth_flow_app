@@ -58,7 +58,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 );
               } else if (state is EmailAuthSuccess) {
-                Navigator.of(context).pushReplacementNamed('/home');
+                Navigator.pushReplacementNamed(context, '/home');
               }
             },
           ),
@@ -72,7 +72,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 );
               } else if (state is SocialAuthSuccess) {
-                Navigator.of(context).pushReplacementNamed('/home');
+                Navigator.pushReplacementNamed(context, '/home');
               }
             },
           ),
@@ -81,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
           builder: (context, emailState) {
             final isLoading =
                 emailState is EmailAuthLoading ||
-                context.watch<SocialAuthBloc>().state is SocialAuthLoading;
+                context.select<SocialAuthBloc, bool>((SocialAuthBloc value) => value.state is SocialAuthLoading);
 
             if (isLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -152,14 +152,14 @@ class _LoginViewState extends State<LoginView> {
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/forgot-password');
+                        Navigator.pushNamed(context, '/forgot-password');
                       },
                       child: const Text('Forgot Password?'),
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/signup');
+                        Navigator.pushNamed(context, '/signup');
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -194,19 +194,6 @@ class _LoginViewState extends State<LoginView> {
                     OutlinedButton.icon(
                       onPressed: () {
                         context.read<SocialAuthBloc>().add(
-                          const SignInWithAppleEvent(),
-                        );
-                      },
-                      icon: const Icon(Icons.apple, size: 28),
-                      label: const Text('Continue with Apple'),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        context.read<SocialAuthBloc>().add(
                           const SignInWithGitHubEvent(),
                         );
                       },
@@ -219,13 +206,13 @@ class _LoginViewState extends State<LoginView> {
                     const SizedBox(height: 24),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/magic-link');
+                        Navigator.pushNamed(context, '/magic-link');
                       },
                       child: const Text('Send Magic Link'),
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/phone-auth');
+                        Navigator.pushNamed(context, '/phone-auth');
                       },
                       child: const Text('Login with Phone Number'),
                     ),

@@ -33,13 +33,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, String>> uploadProfilePicture({
-    required String filePath,
-  }) async {
+  Future<Either<Failure, String>> uploadProfilePicture({required String filePath}) async {
     try {
-      final url = await _profileDataSource.uploadProfilePicture(
-        filePath: filePath,
-      );
+      final url = await _profileDataSource.uploadProfilePicture(filePath: filePath);
       return Right(url);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

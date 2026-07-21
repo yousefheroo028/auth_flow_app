@@ -36,7 +36,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   ) async {
     emit(const SessionLoading());
 
-    final result = await sessionRepository.getCurrentUser();
+    final result = sessionRepository.getCurrentUser();
 
     result.fold(
       ifLeft: (failure) => emit(SessionError(message: failure.message)),

@@ -4,6 +4,7 @@ abstract class EmailAuthDataSource {
   Future<UserModel> signUpWithEmail({
     required String email,
     required String password,
+    required String name,
   });
 
   Future<UserModel> signInWithEmail({
@@ -13,7 +14,9 @@ abstract class EmailAuthDataSource {
 
   Future<void> resetPassword({required String email});
 
-  Future<void> verifyEmail({required String token});
+  Future<void> verifyEmail({required String email, required String token});
 
-  Future<void> sendMagicLink({required String email});
+  Future<void> updatePassword({required String password});
+
+  Future<void> sendMagicLink({required String email, String? emailRedirectTo});
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auth_flow_app/features/auth/domain/repositories/email_auth_repository.dart';
 import 'package:auth_flow_app/features/auth/presentation/bloc/email_auth/email_auth_event.dart';
 import 'package:auth_flow_app/features/auth/presentation/bloc/email_auth/email_auth_state.dart';
@@ -10,7 +12,10 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     on<SignUpWithEmailEvent>(_onSignUpWithEmail);
     on<SignInWithEmailEvent>(_onSignInWithEmail);
     on<ResetPasswordEvent>(_onResetPassword);
+    on<VerifyEmailEvent>(_onVerifyEmail);
+    on<UpdatePasswordEvent>(_onUpdatePassword);
     on<SendMagicLinkEvent>(_onSendMagicLink);
+    on<ResetEmailAuthStateEvent>((event, emit) => emit(const EmailAuthInitial()));
   }
 
   Future<void> _onSignUpWithEmail(
@@ -22,6 +27,7 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     final result = await emailAuthRepository.signUpWithEmail(
       email: event.email,
       password: event.password,
+      name: event.name,
     );
 
     result.fold(
@@ -57,7 +63,29 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
 
     result.fold(
       ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
-      ifRight: (_) => emit(const EmailSent(message: 'Password reset email sent')),
+      ifRight: (_) => emit(PasswordResetRequestEmailSent(message: 'Password reset email has been sent', email: event.email)),
+    );
+  }
+
+  Future<void> _onVerifyEmail(VerifyEmailEvent event, Emitter<EmailAuthState> emit) async {
+    emit(const EmailAuthLoading());
+
+    final result = await emailAuthRepository.verifyEmail(email: event.email, otp: event.otp);
+
+    result.fold(
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (_) => emit(PasswordResetRequestEmailVerify(message: 'Email verified', email: event.email)),
+    );
+  }
+
+  Future<void> _onUpdatePassword(UpdatePasswordEvent event, Emitter<EmailAuthState> emit) async {
+    emit(const EmailAuthLoading());
+
+    final result = await emailAuthRepository.updatePassword(password: event.password);
+
+    result.fold(
+      ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
+      ifRight: (_) => emit(const PasswordResetDone()),
     );
   }
 
@@ -67,11 +95,14 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
   ) async {
     emit(const EmailAuthLoading());
 
-    final result = await emailAuthRepository.sendMagicLink(email: event.email);
+    final result = await emailAuthRepository.sendMagicLink(
+      email: event.email,
+      emailRedirectTo: event.emailRedirectTo,
+    );
 
     result.fold(
       ifLeft: (failure) => emit(EmailAuthError(message: failure.message)),
-      ifRight: (_) => emit(const EmailSent(message: 'Magic link sent to your email')),
+      ifRight: (_) => emit(MagicLinkSentState(email: event.email)),
     );
   }
 }

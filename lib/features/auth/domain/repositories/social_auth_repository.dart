@@ -5,7 +5,5 @@ import 'package:dart_either/dart_either.dart';
 abstract class SocialAuthRepository {
   Future<Either<Failure, UserEntity>> signInWithGoogle();
 
-  Future<Either<Failure, UserEntity>> signInWithApple();
-
-  Future<Either<Failure, UserEntity>> signInWithGitHub();
+  Future<Either<Failure, void>> signInWithGitHub();
 }

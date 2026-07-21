@@ -1,7 +1,7 @@
 import 'package:auth_flow_app/features/auth/presentation/bloc/session/session_bloc.dart';
 import 'package:auth_flow_app/features/auth/presentation/bloc/session/session_event.dart';
 import 'package:auth_flow_app/features/auth/presentation/bloc/session/session_state.dart';
-import 'package:auth_flow_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,14 +25,7 @@ class HomePage extends StatelessWidget {
       body: BlocConsumer<SessionBloc, SessionState>(
         listener: (context, state) {
           if (state is Unauthenticated) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return const LoginPage();
-                },
-              ),
-            );
-            Navigator.of(context).pushReplacementNamed('/login');
+            Navigator.pushReplacementNamed(context, '/login');
           } else if (state is SessionError) {
             ScaffoldMessenger.of(
               context,
@@ -55,7 +48,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: user.photoUrl != null ? NetworkImage(user.photoUrl!) : null,
+                      backgroundImage: user.photoUrl != null ? CachedNetworkImageProvider(user.photoUrl!) : null,
                       child: user.photoUrl == null ? const Icon(Icons.person, size: 50) : null,
                     ),
                     const SizedBox(height: 24),
@@ -70,7 +63,7 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 32),
                     ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/profile');
+                        Navigator.pushNamed(context, '/edit_profile');
                       },
                       icon: const Icon(Icons.person),
                       label: const Text('Edit Profile'),

@@ -35,9 +35,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) async {
     emit(const ProfileLoading());
 
-    final result = await profileRepository.uploadProfilePicture(
-      filePath: event.filePath,
-    );
+    final result = await profileRepository.uploadProfilePicture(filePath: event.filePath);
 
     result.fold(
       ifLeft: (failure) => emit(ProfileError(message: failure.message)),

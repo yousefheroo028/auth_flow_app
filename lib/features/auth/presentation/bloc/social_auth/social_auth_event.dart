@@ -11,10 +11,6 @@ class SignInWithGoogleEvent extends SocialAuthEvent {
   const SignInWithGoogleEvent();
 }
 
-class SignInWithAppleEvent extends SocialAuthEvent {
-  const SignInWithAppleEvent();
-}
-
 class SignInWithGitHubEvent extends SocialAuthEvent {
   const SignInWithGitHubEvent();
 }

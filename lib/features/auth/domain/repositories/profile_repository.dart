@@ -8,9 +8,7 @@ abstract class ProfileRepository {
     String? photoUrl,
   });
 
-  Future<Either<Failure, String>> uploadProfilePicture({
-    required String filePath,
-  });
+  Future<Either<Failure, String>> uploadProfilePicture({required String filePath});
 
   Future<Either<Failure, void>> deleteAccount();
 }

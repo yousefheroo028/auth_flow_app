@@ -26,12 +26,15 @@ class SignupView extends StatefulWidget {
 
 class _SignupViewState extends State<SignupView> {
   final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
+    _formKey.currentState?.dispose();
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -52,8 +55,8 @@ class _SignupViewState extends State<SignupView> {
               ),
             );
           } else if (state is EmailAuthSuccess) {
-            Navigator.of(context).pushReplacementNamed('/home');
-          } else if (state is EmailSent) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (state is PasswordResetRequestEmailSent) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -75,6 +78,23 @@ class _SignupViewState extends State<SignupView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 40),
+                  TextFormField(
+                    controller: _fullNameController,
+                    textCapitalization: .words,
+                    decoration: const InputDecoration(
+                      labelText: 'Full Name',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your full name';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -139,6 +159,7 @@ class _SignupViewState extends State<SignupView> {
                           SignUpWithEmailEvent(
                             email: _emailController.text.trim(),
                             password: _passwordController.text,
+                            name: _fullNameController.text.trim(),
                           ),
                         );
                       }
@@ -155,7 +176,7 @@ class _SignupViewState extends State<SignupView> {
                       const Text('Already have an account?'),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.pop(context);
                         },
                         child: const Text('Login'),
                       ),

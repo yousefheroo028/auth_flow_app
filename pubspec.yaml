@@ -24,11 +24,16 @@ dependencies:
   # UI Components
   cupertino_icons: ^1.0.6
 
+  # OTP / Pin code input
   # Image Picker
   image_picker: ^1.0.4
 
   # HTTP
   http: ^1.1.0
+  supabase_flutter: ^2.16.0
+  flutter_dotenv: ^6.0.1
+  google_sign_in: ^7.2.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +46,4 @@ flutter:
 
   assets:
     - assets/images/
+    - .env

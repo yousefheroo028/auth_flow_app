@@ -9,10 +9,11 @@ class SessionDataSourceImpl implements SessionDataSource {
   SessionDataSourceImpl(this._authClient);
 
   @override
-  Future<UserModel?> getCurrentUser() async {
+  UserModel? getCurrentUser() {
     try {
-      // TODO: Implement getCurrentUser
-      throw UnimplementedError('getCurrentUser not implemented yet');
+      final currentUser = _authClient.getCurrentUser;
+      if (currentUser == null) throw AuthException('User is not signed.');
+      return UserModel.fromSupabase(currentUser);
     } catch (e) {
       throw ServerException('Failed to get current user: ${e.toString()}');
     }
@@ -21,8 +22,7 @@ class SessionDataSourceImpl implements SessionDataSource {
   @override
   Future<void> signOut() async {
     try {
-      // TODO: Implement signOut
-      throw UnimplementedError('signOut not implemented yet');
+      _authClient.signOut();
     } on AuthException {
       rethrow;
     } catch (e) {
@@ -32,7 +32,9 @@ class SessionDataSourceImpl implements SessionDataSource {
 
   @override
   Stream<UserModel?> get authStateChanges {
-    // TODO: Implement authStateChanges
-    throw UnimplementedError('authStateChanges not implemented yet');
+    return _authClient.getAuthChange.map((event) {
+      if (event.session == null) return null;
+      return UserModel.fromSupabase(event.session!.user);
+    });
   }
 }
